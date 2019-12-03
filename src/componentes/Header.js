@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 
 export default class Header extends Component {
 
@@ -26,6 +27,11 @@ export default class Header extends Component {
                         </li>
                     </ul>
                 </nav>
+                <Link to="/logout">
+                        Logout
+               {/* <!--                 ♥-->
+                <!--Quem deu like nas minhas fotos?--> */}
+                    </Link>
             </header>
         );
     }
