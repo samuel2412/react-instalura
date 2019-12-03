@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './componentes/Header'
-import FotoItem from './componentes/FotoItem';
+import TimeLine from './componentes/TimeLine';
 
 function App() {
   return (
@@ -8,11 +8,7 @@ function App() {
       <div className="main">
 
         <Header />
-
-        <div className="fotos container">
-          <FotoItem />
-
-        </div>
+        <TimeLine />
       </div>
     </div>
   );
