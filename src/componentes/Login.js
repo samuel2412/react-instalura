@@ -17,17 +17,17 @@ export default class Login extends Component {
         event.preventDefault();
         axios.post(`http://localhost:8080/api/public/login`, { login: this.login.value, senha: this.senha.value })
             .then(res => {
-                console.log(res)
+                //console.log(res)
                 if(res.status === 200){
                     return res.data;
                 }    
             }).then(token => {
-                console.log(token)
+                //console.log(token)
                 localStorage.setItem('auth-token',token)
                 this.props.history.push("/timeline");
                 
             }).catch(erro => {
-                console.log(erro)
+               // console.log(erro)
                 this.setState({ msg:'Login ou Senha inválidos' })
             })
     }

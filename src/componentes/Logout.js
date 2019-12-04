@@ -3,7 +3,7 @@ import { Component } from 'react';
 
 export default class Logout extends Component {
 
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         localStorage.removeItem('auth-token');
         this.props.history.push('/')
     }
