@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FotoItem from './FotoItem';
 import axios from 'axios';
+import PubSub from 'pubsub-js'
 
 
 
@@ -13,6 +14,14 @@ export default class TimeLine extends Component {
         this.login = this.props.login;
 
     }
+
+
+    componentWillMount(){
+        PubSub.subscribe('timeline',(topico,fotos) => {
+            this.setState({fotos});
+        })
+    }
+
 
     componentDidMount() {
         this.carregaFotos()
