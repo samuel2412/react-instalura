@@ -30,12 +30,35 @@ class FotoAtulizacoes extends Component {
       })
   }
 
+  comentaFoto(event) {
+    event.preventDefault();
+
+    axios.post(`http://localhost:8080/api/fotos/${this.props.foto.id}/comment?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`
+    , {texto:this.comentario.value}
+    )
+      .then(res => {
+          //console.log(res)
+        if (res.status === 200) {
+          return res.data;
+        }
+      }).then(novoComentario => {
+        //console.log(liker)
+        //this.setState({ likeada: !this.state.likeada })
+        PubSub.publish('novo-comentarios', { fotoId:this.props.foto.id,novoComentario});
+
+      }).catch(erro => {
+        //console.log(erro)
+        this.setState({ msg: 'Não foi possível completar a ação' })
+      })
+  }
+
+
   render() {
     return (
       <section className="fotoAtualizacoes">
         <a onClick={this.likeFoto.bind(this)} className={this.state.likeada ? 'fotoAtualizacoes-like-ativo' : 'fotoAtualizacoes-like'}>Linkar</a>
-        <form className="fotoAtualizacoes-form">
-          <input type="text" placeholder="Adicione um comentário..." className="fotoAtualizacoes-form-campo" />
+        <form className="fotoAtualizacoes-form" onSubmit={this.comentaFoto.bind(this)}>
+          <input type="text" placeholder="Adicione um comentário..." className="fotoAtualizacoes-form-campo" ref={input => this.comentario = input} />
           <input type="submit" value="Comentar!" className="fotoAtualizacoes-form-submit" />
         </form>
 
@@ -48,10 +71,20 @@ class FotoInfo extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { likers: this.props.foto.likers }
+    this.state = { likers: this.props.foto.likers, comentarios: this.props.foto.comentarios }
   }
 
   componentDidMount() {
+    PubSub.subscribe('novo-comentarios', (topico, infoComentario) => {
+      if (this.props.foto.id === infoComentario.fotoId) {
+      
+        const novosComentarios = this.state.comentarios.concat(infoComentario.novoComentario);
+        console.log(novosComentarios)
+        this.setState({comentarios: novosComentarios});
+        
+      }
+    });
+
     PubSub.subscribe('atualiza-liker', (topico, infoLiker) => {
       if (this.props.foto.id === infoLiker.fotoId) {
         const possivelLiker = this.state.likers.find(liker => liker.login === infoLiker.liker.login);
@@ -64,8 +97,15 @@ class FotoInfo extends Component {
         }
       }
     });
+
+
+
+
+
   }
   render() {
+    //console.log(this.comentarios)
+
     return (
       <div className="foto-info">
         <div className="foto-info-likes">
@@ -86,14 +126,14 @@ class FotoInfo extends Component {
 
         <ul className="foto-info-comentarios">
           {
-            this.props.foto.comentarios.map(comentario => {
+            this.state.comentarios.map(comentario => {
               return (
-                <li className="comentario" key={comentario.id}>
+                  <li className="comentario" key={comentario.id}>
                   <Link to={`/timeline/${comentario.login}`} className="foto-info-autor">{comentario.login} </Link>
                   {comentario.texto}
-                </li>
+                  </li>
               );
-            })
+              })
           }
         </ul>
       </div>
