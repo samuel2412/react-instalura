@@ -28,7 +28,7 @@ export default class TimeLine extends Component {
     carregaFotos(){
         let urlPerfil;       
         
-        console.log(this.login)
+        //console.log(this.login)
         
         if(this.login === undefined) {
             urlPerfil = `http://localhost:8080/api/fotos?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`;
