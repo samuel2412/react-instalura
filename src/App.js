@@ -3,13 +3,15 @@ import Header from './componentes/Header'
 import TimeLine from './componentes/TimeLine';
 
 
-function App() {
+function App(props) {
+  
+  
+  //<TimeLine login={props.match.params.login}/>
   return (
     <div id="root">
       <div className="main">
-
         <Header />
-        <TimeLine />
+        <TimeLine login={props.match}/>
       </div>
     </div>
   );

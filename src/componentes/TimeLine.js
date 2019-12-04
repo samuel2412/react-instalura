@@ -7,30 +7,50 @@ import axios from 'axios';
 
 export default class TimeLine extends Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = { fotos: [] }
+        this.login = this.props.login;
+
     }
 
     componentDidMount() {
-        axios.get(`http://localhost:8080/api/fotos?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`)
+        this.carregaFotos()
+    }
+    UNSAFE_componentWillReceiveProps(nextProps){
+        
+        if(nextProps.login !== undefined){
+            
+            this.login = nextProps.login;
+            this.carregaFotos();
+        }
+    }
+    carregaFotos(){
+        let urlPerfil;       
+        
+        console.log(this.login)
+        
+        if(this.login === undefined) {
+            urlPerfil = `http://localhost:8080/api/fotos?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`;
+        } else {
+           // urlPerfil = `http://localhost:8080/api/public/fotos/${this.login}`;
+            urlPerfil = `http://localhost:8080/api/public/fotos/${this.login.params.login}`;
+        }
+        //console.log(urlPerfil)
+
+
+        axios.get(urlPerfil)
         .then(({ data }) => {
-            console.log(data)
+            //console.log(data)
             this.setState({
                 fotos: data
             })
         })
-        /* fetch('http://localhost:8080/api/public/fotos/alots')
-            .then(response => response.json())
-            .then(fotos => {
-                this.setState({ fotos: fotos });
-            }); */
-
     }
   
 
     render() {
-        console.log(this.state.fotos)
+        //console.log(this.state.fotos)
         return (
             <div className="fotos container">
                 {

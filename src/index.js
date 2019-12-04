@@ -24,13 +24,14 @@ ReactDOM.render(
             <Switch>
 
                 <Route exact path="/" component={Login} />
-                <Route path="/timeline" render={() => (
+                <Route exact path="/timeline" render={() => (
                     verificaAutenticacao() ? (
                         <App />
                     ) : (
                             <Redirect to="/?msg=Você precisa estar logado para acessar a Timeline!" />
                         )
                 )} />
+                <Route path="/timeline/:login" component={App} />
                  <Route path="/logout" component={Logout}/>
 
             </Switch>
