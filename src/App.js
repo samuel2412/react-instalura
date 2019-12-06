@@ -1,10 +1,11 @@
 import React from 'react';
 import Header from './componentes/Header'
 import TimeLine from './componentes/TimeLine';
-import LogicaTimeLine from './logicas/LogicaTimeLine';
+import {createStore,applyMiddleware} from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import {timeline} from './reducers/timeline';
 
-
-const logicaTimeLine = new LogicaTimeLine([]);
+const store = createStore(timeline,applyMiddleware(thunkMiddleware));
 function App(props) {
   
   
@@ -13,7 +14,7 @@ function App(props) {
     <div id="root">
       <div className="main">
         <Header />
-        <TimeLine login={props.match}  store={logicaTimeLine} />
+        <TimeLine login={props.match}  store={store} />
       </div>
     </div>
   );

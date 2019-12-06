@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FotoItem from './FotoItem';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import TimelineApi from '../API/TimeLineApi';
 
 
 
@@ -15,15 +16,12 @@ export default class TimeLine extends Component {
     }
 
 
-    UNSAFE_componentWillMount() {
-        this.props.store.subscribe(fotos => {
-            this.setState({ fotos });
-        })
-    }
-
-
     componentDidMount() {
+        this.props.store.subscribe(() => {
+            this.setState({fotos:this.props.store.getState()});
+          })
         this.carregaFotos()
+       
     }
     UNSAFE_componentWillReceiveProps(nextProps) {
 
@@ -33,14 +31,13 @@ export default class TimeLine extends Component {
             this.carregaFotos();
         }
     }
-
     like(fotoId) {
-        this.props.store.like(fotoId)
-    }
-
-    comenta(fotoId, textoComentario) {
-        this.props.store.comenta(fotoId, textoComentario);
-    }
+        this.props.store.dispatch(TimelineApi.like(fotoId));
+      }
+  
+      comenta(fotoId,textoComentario) {
+        this.props.store.dispatch(TimelineApi.comenta(fotoId,textoComentario));
+      }
 
 
 
@@ -56,7 +53,7 @@ export default class TimeLine extends Component {
             urlPerfil = `http://localhost:8080/api/public/fotos/${this.login.params.login}`;
         }
         //console.log(urlPerfil)
-        this.props.store.carregaFotos(urlPerfil);
+        this.props.store.dispatch(TimelineApi.lista(urlPerfil)); 
     }
 
 
