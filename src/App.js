@@ -1,25 +1,30 @@
-import React from 'react';
+import React,{Component} from 'react';
 import Header from './componentes/Header'
-import TimeLine from './componentes/TimeLine';
-import {createStore,applyMiddleware,combineReducers} from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import {timeline} from './reducers/timeline';
-import {notificacao} from './reducers/notificacao'
+import Timeline from './componentes/TimeLine';
+import PropTypes from 'prop-types';
 
-const reducers = combineReducers({timeline,notificacao});
-const store = createStore(reducers,applyMiddleware(thunkMiddleware));
-function App(props) {
+class App extends Component{
   
-  
-  //<TimeLine login={props.match.params.login}/>
-  return (
+  constructor(props){
+    super(props)
+  }
+
+//<Header store={this.context.store}/>
+  render(){
+    console.log(this.props)
+    return (
     <div id="root">
       <div className="main">
-        <Header store={store} />
-        <TimeLine login={props.match}  store={store} />
+        
+        <Timeline login={this.props.match.params}/>
       </div>
     </div>
-  );
+    );
+  }
+
+}
+App.contextTypes = {
+  store : PropTypes.object.isRequired
 }
 
 export default App;
