@@ -18,7 +18,7 @@ export default class TimeLine extends Component {
 
     componentDidMount() {
         this.props.store.subscribe(() => {
-            this.setState({fotos:this.props.store.getState()});
+            this.setState({fotos:this.props.store.getState().timeline});
           })
         this.carregaFotos()
        

@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { listagem, comentario, like, notifica } from '../actions/actionCreator';
 
 export default class TimelineApi {
 
@@ -8,7 +8,7 @@ export default class TimelineApi {
             axios.get(urlPerfil)
                 .then(({ data }) => {
                     //console.log(data)
-                    dispatch({ type: 'LISTAGEM', fotos: data });
+                    dispatch(listagem(data));
                     return data;
                 })
         }
@@ -25,7 +25,7 @@ export default class TimelineApi {
                         return res.data;
                     }
                 }).then(novoComentario => {
-                    dispatch({ type: 'COMENTARIO', fotoId, novoComentario });
+                    dispatch(comentario(fotoId, novoComentario));
                     return novoComentario;
 
                 }).catch(erro => {
@@ -43,11 +43,28 @@ export default class TimelineApi {
                         return res.data;
                     }
                 }).then(liker => {
-                    dispatch({ type: 'LIKE', fotoId, liker });
+                    dispatch(like(fotoId, liker));
                     return liker;
                 }).catch(erro => {
                     console.log(erro)
                 })
+        }
+    }
+
+    static pesquisa(login) {
+        return dispatch => {
+            axios.get(`http://localhost:8080/api/public/fotos/${login}`)
+                .then(response => response.data)
+                .then(fotos => {
+                    if (fotos.length === 0) {
+                        dispatch(notifica('usuario não encontrado'));
+                    } else {
+                        dispatch(notifica(''));
+                    }
+
+                    dispatch(listagem(fotos));
+
+                });
         }
     }
 }
