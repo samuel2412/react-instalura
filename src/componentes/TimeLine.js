@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FotoItem from './FotoItem';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import LogicaTimeLine from '../logicas/LogicaTimeLine';
+
 
 
 
@@ -12,12 +12,11 @@ export default class TimeLine extends Component {
         super(props)
         this.state = { fotos: [] }
         this.login = this.props.login;
-        this.logica = new LogicaTimeLine([]);
     }
 
 
     UNSAFE_componentWillMount() {
-        this.logica.subscribe(fotos => {
+        this.props.store.subscribe(fotos => {
             this.setState({ fotos });
         })
     }
@@ -36,11 +35,11 @@ export default class TimeLine extends Component {
     }
 
     like(fotoId) {
-        this.logica.like(fotoId)
+        this.props.store.like(fotoId)
     }
 
     comenta(fotoId, textoComentario) {
-        this.logica.comenta(fotoId, textoComentario);
+        this.props.store.comenta(fotoId, textoComentario);
     }
 
 
@@ -57,7 +56,7 @@ export default class TimeLine extends Component {
             urlPerfil = `http://localhost:8080/api/public/fotos/${this.login.params.login}`;
         }
         //console.log(urlPerfil)
-        this.logica.carregaFotos(urlPerfil);
+        this.props.store.carregaFotos(urlPerfil);
     }
 
 
